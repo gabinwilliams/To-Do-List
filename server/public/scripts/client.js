@@ -10,7 +10,7 @@ function handleReady() {
 
 // Click listeners
   $('#addBtn').on('click', sendNewTask)
-
+  $('#displayTask').on('click', '.deleteBtn', removeTask)
   getTasks();
 }// end handleReady
 
@@ -67,4 +67,28 @@ function sendNewTask() {
       
     });
 
-}
+}// end sendNewTask
+
+
+// DELETE ROUTE
+
+function removeTask() {
+    
+  const id = $(this).data('id');
+  console.log('This is the id:', id);
+
+  $.ajax({
+    type: 'DELETE',
+    url: `/toDo/${id}`
+
+  }).then(function (response) {
+
+    
+    getTasks();
+
+  }).catch(function (error) {
+    console.log(error);
+    alert('error in delete');
+  });
+
+}// end removeTask
