@@ -27,6 +27,37 @@ router.get('/', (req, res) => {
 });// end GET
 
 
+// POST ROUTE
+
+router.post('/', (req, res) => {
+
+  console.log('Object from client POST', req.body);
+  const newTask = req.body;
+
+  const queryText = `
+    INSERT INTO "todo" ("task")
+    VALUES ($1);
+  
+  `;
+
+  pool.query(queryText, [newTask.task])
+
+  .then((result) => {
+    console.log('In POST sending:', result);
+
+    res.sendStatus(200);
+  }).catch((error) => {
+
+    console.log('error in POST', error);
+
+    res.sendStatus(500);
+
+  });
+
+  });
+
+
+
 
 
 
