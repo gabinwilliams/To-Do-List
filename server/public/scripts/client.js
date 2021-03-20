@@ -11,6 +11,7 @@ function handleReady() {
 // Click listeners
   $('#addBtn').on('click', sendNewTask)
   $('#displayTask').on('click', '.deleteBtn', removeTask)
+  $('#displayTask').on('click', '.markCompleteBtn', toggleComplete)
   getTasks();
 }// end handleReady
 
@@ -22,10 +23,17 @@ function renderTasks(array) {
   array.forEach((task) => {
     // let completeStatus = task.complete === true ? 'Yes' : 'No';
     $('#displayTask').append(`
-        <li data-status="${task.complete}" >${task.task} 
-        <button data-id="${task.id}" class="deleteBtn">Delete</button>
-        </li>
-      
+      <div>
+        <div>
+        <button 
+        data-id="${task.id}" 
+        data-status="${task.complete}"class="markCompleteBtn">Completed
+        </button>
+        ${task.task} 
+        <button data-id="${task.id}" class="deleteBtn">Delete
+        </button>
+        </div>
+      </div>
     `);
   });
 }// end renderTasks
@@ -59,7 +67,7 @@ function sendNewTask() {
 
   }).then(function (response) {
       console.log(response);
-
+      $('#taskIn').val('');
       getTasks();
 
     }).catch(function (error) {
@@ -92,3 +100,42 @@ function removeTask() {
   });
 
 }// end removeTask
+
+
+// PUT ROUTE
+
+function toggleComplete() {
+  
+
+  const id = $(this).data('id');
+  console.log('This is the clicked ID:', id);
+
+  let status = $(this).data('status');
+
+  console.log('Updated status to: ', objectUpdate);
+
+
+  let objectUpdate = {
+
+    id: id,
+    status: status
+  };
+
+  
+
+  $.ajax({
+
+    type: 'PUT',
+    url: `toDo/${id}`,
+    data: objectUpdate
+
+  }).then(function (response) {
+    
+      getTasks();
+    })
+    .catch(function (error) {
+      console.log('Error in PUT', error);
+    });
+
+
+}// end markComplete

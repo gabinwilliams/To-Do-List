@@ -78,8 +78,37 @@ router.delete('/:id', (req, res) => {
     });
 });
   
+// PUT ROUTE
 
+router.put('/:id', (req, res) => {
 
+  let status = req.body.status;
+  const id = req.params.id;
+  console.log('This is ID of PUT route', id);
+  let queryText; 
+  
+  console.log('status:', status);
+
+  if (status === 'true'){
+      queryText = `UPDATE "todo" SET "complete"=false WHERE "id"=$1`;
+  }
+  
+  if (status === 'false'){
+      queryText = `UPDATE "todo" SET "complete"=true WHERE "id"=$1`;
+  }
+ 
+  pool.query(queryText, [id])
+
+  .then((result) => {
+        
+    res.sendStatus(204);
+
+  }).catch((error) => {
+    console.log(error);
+    res.sendStatus(500);
+  });
+
+});// end PUT
 
 
 
