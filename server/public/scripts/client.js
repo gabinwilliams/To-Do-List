@@ -1,35 +1,25 @@
-console.log('JS ready');
+console.log("JS ready");
 
 $(document).ready(handleReady);
 
-
-
 function handleReady() {
+  console.log("jQuery ready!");
 
-  console.log('jQuery ready!');
-
-// Click listeners
-  $('#addBtn').on('click', sendNewTask)
-  $('#displayTask').on('click', '.deleteBtn', removeTask)
-  $('#displayTask').on('click', '.markCompleteBtn', toggleComplete)
+  // Click listeners
+  $("#addBtn").on("click", sendNewTask);
+  $("#displayTask").on("click", ".deleteBtn", removeTask);
+  $("#displayTask").on("click", ".markCompleteBtn", toggleComplete);
+  // get tasks from DB on page load
   getTasks();
-}// end handleReady
-
-
-
-
+} // end handleReady
 
 function renderTasks(array) {
-
-  $('#displayTask').empty();
-
-  
+  $("#displayTask").empty();
 
   array.forEach((task) => {
-    
-    if(task.complete) {
-
-      $('#displayTask').append(`
+    // appends different styling if task is marked complete
+    if (task.complete) {
+      $("#displayTask").append(`
       <div class="h-24 bg-white bg-opacity-10 my-5 shadow-lg rounded">
         <div>
         <button 
@@ -50,10 +40,9 @@ function renderTasks(array) {
         </div>
       </div>
     `);
-
-    }else{
-
-      $('#displayTask').append(`
+    // appends normal styling if the task hasn't been completed
+    } else {
+      $("#displayTask").append(`
       <div class="h-24 bg-white bg-opacity-50 my-5 shadow-lg rounded">
         <div>
         <button 
@@ -74,23 +63,16 @@ function renderTasks(array) {
         </div>
       </div>
     `);
-
-    }// end else
-
+    } // end else
   });
-      
-}// end renderTasks
-
+} // end renderTasks
 
 // GET ROUTE
 function getTasks() {
-
   $.ajax({
-    type: 'GET',
-    url: '/toDo'
-
+    type: "GET",
+    url: "/toDo",
   }).then(function (response) {
-
     renderTasks(response);
   });
 } // end getTasks
@@ -98,94 +80,73 @@ function getTasks() {
 // POST ROUTE
 
 function sendNewTask() {
+  // input validation
+  if ($("#taskIn").val().length === 0) {
+    alert("Type a task please!");
+  } else {
+    let newTask = {
+      task: $("#taskIn").val(),
+    };
 
-  if($('#taskIn').val().length === 0) {
-
-    alert('Type a task please!')
-
-  }else{
-
-  let newTask = {
-    task: $('#taskIn').val(),
-  }
-
-  $.ajax({
-
-    type: 'POST',
-    url: '/toDo',
-    data: newTask
-
-  }).then(function (response) {
-      console.log(response);
-      $('#taskIn').val('');
-      getTasks();
-
-    }).catch(function (error) {
-      console.log('error in POST', error);
-      
-    });
-}// end else
-}// end sendNewTask
-
+    $.ajax({
+      type: "POST",
+      url: "/toDo",
+      data: newTask,
+    })
+      .then(function (response) {
+        console.log(response);
+        $("#taskIn").val("");
+        getTasks();
+      })
+      .catch(function (error) {
+        console.log("error in POST", error);
+      });
+  } // end else
+} // end sendNewTask
 
 // DELETE ROUTE
 
 function removeTask() {
-    
-  const id = $(this).data('id');
-  console.log('This is the id:', id);
+  const id = $(this).data("id");
+  console.log("This is the id:", id);
 
   $.ajax({
-    type: 'DELETE',
-    url: `/toDo/${id}`
-
-  }).then(function (response) {
-
-    
-    getTasks();
-
-  }).catch(function (error) {
-    console.log(error);
-    alert('error in delete');
-  });
-
-}// end removeTask
-
+    type: "DELETE",
+    url: `/toDo/${id}`,
+  })
+    .then(function (response) {
+      getTasks();
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert("error in delete");
+    });
+} // end removeTask
 
 // PUT ROUTE
 
 function toggleComplete() {
-  
+  const id = $(this).data("id");
+  console.log("This is the clicked ID:", id);
 
-  const id = $(this).data('id');
-  console.log('This is the clicked ID:', id);
-
-  let status = $(this).data('status');
-
- 
-
+  let status = $(this).data("status");
 
   let objectUpdate = {
-
     id: id,
-    status: status
+    status: status,
   };
 
-  console.log('Updated status to: ', objectUpdate);
+  console.log("Updated status to: ", objectUpdate);
 
   $.ajax({
-
-    type: 'PUT',
+    type: "PUT",
     url: `toDo/${id}`,
-    data: objectUpdate
-
-  }).then(function (response) {
-    
+    data: objectUpdate,
+  })
+    .then(function (response) {
       getTasks();
     })
     .catch(function (error) {
-      console.log('Error in PUT', error);
+      console.log("Error in PUT", error);
     });
-
-
-}// end markComplete
+} // end markComplete
