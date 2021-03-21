@@ -30,7 +30,7 @@ function renderTasks(array) {
     if(task.complete) {
 
       $('#displayTask').append(`
-      <div class="h-24 bg-white bg-opacity-10 my-5 rounded">
+      <div class="h-24 bg-white bg-opacity-10 my-5 shadow-lg rounded">
         <div>
         <button 
         data-id="${task.id}" 
@@ -54,7 +54,7 @@ function renderTasks(array) {
     }else{
 
       $('#displayTask').append(`
-      <div class="h-24 bg-white bg-opacity-50 my-5 rounded">
+      <div class="h-24 bg-white bg-opacity-50 my-5 shadow-lg rounded">
         <div>
         <button 
         data-id="${task.id}" 
@@ -82,12 +82,6 @@ function renderTasks(array) {
 }// end renderTasks
 
 
-
-    
-
-
-
-
 // GET ROUTE
 function getTasks() {
 
@@ -104,6 +98,12 @@ function getTasks() {
 // POST ROUTE
 
 function sendNewTask() {
+
+  if($('#taskIn').val().length === 0) {
+
+    alert('Type a task please!')
+
+  }else{
 
   let newTask = {
     task: $('#taskIn').val(),
@@ -124,7 +124,7 @@ function sendNewTask() {
       console.log('error in POST', error);
       
     });
-
+}// end else
 }// end sendNewTask
 
 
