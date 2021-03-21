@@ -4,7 +4,7 @@
 
 This is Full Stack TODO app built with javaScript, jQuery, node.js, express, postgreSQL
 
-![screenshot of the app]()
+![screenshot of the app](https://github.com/gabinwilliams/To-Do-List/blob/master/server/public/images/todoApp%20ScreenShot.png)
 
 ### Prerequisites
 
